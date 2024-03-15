@@ -1,15 +1,27 @@
 <script setup>
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import logo from '@images/logo.svg?raw'
+import AuthProvider from '@/views/pages/authentication/AuthProvider.vue';
+import logo from '@images/logo.svg?raw';
+import axios from 'axios';
 
 const form = ref({
-  username: '',
+  name: '',
   email: '',
   password: '',
+  c_password: '',
   privacyPolicies: false,
 })
 
 const isPasswordVisible = ref(false)
+
+const register = () => {
+  axios.post('/api/auth/register', form.value)
+    .then(response => {
+      alert(response.data.message)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
 </script>
 
 <template>
@@ -43,14 +55,14 @@ const isPasswordVisible = ref(false)
       </VCardText>
 
       <VCardText>
-        <VForm @submit.prevent="$router.push('/')">
+        <VForm @submit.prevent="register">
           <VRow>
-            <!-- Username -->
+            <!-- name -->
             <VCol cols="12">
               <VTextField
-                v-model="form.username"
+                v-model="form.name"
                 autofocus
-                label="Username"
+                label="name"
                 placeholder="Johndoe"
               />
             </VCol>
@@ -74,29 +86,41 @@ const isPasswordVisible = ref(false)
                 :append-inner-icon="isPasswordVisible ? 'bx-hide' : 'bx-show'"
                 @click:append-inner="isPasswordVisible = !isPasswordVisible"
               />
-              <div class="d-flex align-center mt-1 mb-4">
-                <VCheckbox
-                  id="privacy-policy"
-                  v-model="form.privacyPolicies"
-                  inline
-                />
-                <VLabel
-                  for="privacy-policy"
-                  style="opacity: 1;"
-                >
-                  <span class="me-1">I agree to</span>
-                  <a
-                    href="javascript:void(0)"
-                    class="text-primary"
-                  >privacy policy & terms</a>
-                </VLabel>
-              </div>
+            </VCol>
+            <VCol cols="12">
+              <!-- confirm password -->
+              <VTextField
+                v-model="form.c_password"
+                label="Confirm Password"
+                placeholder="············"
+                :type="isPasswordVisible ? 'text' : 'password'"
+                :append-inner-icon="isPasswordVisible ? 'bx-hide' : 'bx-show'"
+                @click:append-inner="isPasswordVisible = !isPasswordVisible"
+              />
+
+                <div class="d-flex align-center mt-1 mb-4">
+                  <VCheckbox
+                    id="privacy-policy"
+                    v-model="form.privacyPolicies"
+                    inline
+                  />
+                  <VLabel
+                    for="privacy-policy"
+                    style="opacity: 1;"
+                  >
+                    <span class="me-1">I agree to</span>
+                    <a
+                      href="javascript:void(0)"
+                      class="text-primary"
+                    >privacy policy & terms</a>
+                  </VLabel>
+                </div>
 
               <VBtn
                 block
                 type="submit"
               >
-                Sign up
+                註冊
               </VBtn>
             </VCol>
 

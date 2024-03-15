@@ -1,6 +1,7 @@
 <script setup>
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import logo from '@images/logo.svg?raw'
+import AuthProvider from '@/views/pages/authentication/AuthProvider.vue';
+import logo from '@images/logo.svg?raw';
+import axios from 'axios';
 
 const form = ref({
   email: '',
@@ -9,6 +10,16 @@ const form = ref({
 })
 
 const isPasswordVisible = ref(false)
+
+const login = () => {
+  axios.post('/api/auth/login', form.value)
+    .then(response => {
+      alert(response.data.message)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
 </script>
 
 <template>
@@ -42,7 +53,7 @@ const isPasswordVisible = ref(false)
       </VCardText>
 
       <VCardText>
-        <VForm @submit.prevent="$router.push('/')">
+        <VForm @submit.prevent="login">
           <VRow>
             <!-- email -->
             <VCol cols="12">
